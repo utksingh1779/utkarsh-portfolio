@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utkarsh | Freelance Video Editor</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;800&family=Poppins:wght@600&display=swap" rel="stylesheet">
+    
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="loading">
+    
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Spotlight Background -->
+    <div class="spotlight"></div>
+    <div class="noise"></div>
+
+    <!-- Loader -->
+    <div class="loader">
+        <div class="loader-content">
+            <h1 class="loader-title">Utkarsh</h1>
+            <p class="loader-subtitle" style="font-size: 1.2rem; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 4px;">Freelance Video Editor</p>
+            <div class="progress-bar"><div class="progress"></div></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">Utkarsh</div>
+        <div class="nav-links">
+            <a href="#work" class="magnetic-btn">Work</a>
+            <a href="#about" class="magnetic-btn">About</a>
+            <a href="#services" class="magnetic-btn">Services</a>
+            <a href="#contact" class="magnetic-btn contact-nav">Hire Me</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero">
+            <div class="video-overlay"></div>
+            <!-- Background Video - Users can replace this -->
+            <video class="hero-bg" autoplay loop muted playsinline>
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-1610-large.mp4" type="video/mp4">
+            </video>
+            
+            <div class="hero-content">
+                <h1 class="glitch" data-text="Utkarsh">Utkarsh</h1>
+                <h3>Freelance Video Editor</h3>
+                <p class="tagline" style="font-size: 1.5rem; color: #ccc; font-weight: 300; font-style: italic;">"I turn ordinary footage into cinematic stories."</p>
+                <a href="#work" class="btn-primary magnetic-btn mt-2" id="view-work-btn">
+                    <span class="btn-text">View My Work</span>
+                    <i data-lucide="arrow-down"></i>
+                </a>
+            </div>
+            
+            <div class="scroll-indicator">
+                <span>Scroll</span>
+                <div class="line"></div>
+            </div>
+        </section>
+
+        <!-- Marquee removed per request -->
+
+        <!-- Portfolio System -->
+        <section id="work" class="portfolio">
+            <div class="section-header">
+                <h2>Featured Projects</h2>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="Anime Edits">Anime</button>
+                    <button class="filter-btn" data-filter="Motion Graphics">Motion</button>
+                    <button class="filter-btn" data-filter="Client Work">Client</button>
+                </div>
+            </div>
+            
+            <div class="portfolio-grid" id="portfolio-grid">
+                <!-- Cards generated via data.js -->
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <div class="about-grid">
+                <div class="about-text">
+                    <h2>About Me</h2>
+                    <p class="lead">I specialize in high-end video editing, bringing creativity and technical expertise to every project.</p>
+                    <p>With a strong foundation in cinematic editing and motion graphics, I help creators and brands tell compelling stories.</p>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="counter" data-target="20">0</span>+
+                            <span class="stat-label">Projects Completed</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="counter" data-target="5">0</span>+
+                            <span class="stat-label">Years Experience</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="counter" data-target="100">0</span>%
+                            <span class="stat-label">Client Satisfaction</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services -->
+        <section id="services" class="services">
+            <div class="section-header center">
+                <h2>My Services</h2>
+            </div>
+            
+            <div class="service-cards">
+                <div class="service-card glass">
+                    <div class="service-icon"><i data-lucide="video"></i></div>
+                    <h3>Anime Editing</h3>
+                    <p>High-energy edits with perfect sync, dynamic typography, and advanced VFX.</p>
+                </div>
+                <div class="service-card glass">
+                    <div class="service-icon"><i data-lucide="smartphone"></i></div>
+                    <h3>Short-form Content</h3>
+                    <p>Engaging TikToks, Reels, and Shorts optimized for maximum viewer retention.</p>
+                </div>
+                <div class="service-card glass">
+                    <div class="service-icon"><i data-lucide="layers"></i></div>
+                    <h3>Motion Graphics</h3>
+                    <p>Custom animations, lower thirds, and intro sequences to elevate your brand.</p>
+                </div>
+                <div class="service-card glass">
+                    <div class="service-icon"><i data-lucide="palette"></i></div>
+                    <h3>Color Grading</h3>
+                    <p>Professional color correction and grading to achieve cinematic looks.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Client Experience -->
+        <section class="experience">
+            <div class="experience-grid">
+                <div class="exp-card">
+                    <i data-lucide="zap"></i>
+                    <h4>Fast Delivery</h4>
+                    <p>Efficient workflow ensuring quick turnaround times without compromising quality.</p>
+                </div>
+                <div class="exp-card">
+                    <i data-lucide="award"></i>
+                    <h4>High Quality</h4>
+                    <p>Attention to detail and premium finish on every single frame.</p>
+                </div>
+                <div class="exp-card">
+                    <i data-lucide="briefcase"></i>
+                    <h4>Professional Workflow</h4>
+                    <p>Clear communication, structured revisions, and reliable file delivery.</p>
+                </div>
+                <div class="exp-card">
+                    <i data-lucide="sparkles"></i>
+                    <h4>Unlimited Creativity</h4>
+                    <p>Bringing fresh, innovative ideas to make your project stand out.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact">
+            <div class="contact-content">
+                <h2>Let's Create Something Amazing</h2>
+                <p>Ready to elevate your video content? Get in touch today.</p>
+                
+                <div class="contact-links">
+                    <a href="mailto:utksingh1779@gmail.com" class="btn-primary magnetic-btn lg">
+                        <span class="btn-text">Hire Me (Email)</span>
+                        <i data-lucide="mail"></i>
+                    </a>
+                    <a href="https://wa.me/918433491257" target="_blank" class="btn-primary magnetic-btn lg outline">
+                        <span class="btn-text">WhatsApp Me</span>
+                        <i data-lucide="message-circle"></i>
+                    </a>
+                </div>
+                
+                <div class="socials">
+                    <a href="mailto:utksingh1779@gmail.com" class="magnetic-btn" title="Email"><i data-lucide="mail"></i></a>
+                    <a href="https://instagram.com/utkarsh.6.20" target="_blank" class="magnetic-btn" title="Instagram: @utkarsh.6.20">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                    </a>
+                    <a href="https://linktr.ee/utk20" target="_blank" class="magnetic-btn" title="Linktree: utk20">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M13.736 5.853l4.005-4.117 2.325 2.38-4.2 4.005h5.908v3.315h-5.908l4.2 4.008-2.325 2.38-4.005-4.117v7.75h-3.32v-7.75l-4.004 4.117-2.326-2.38 4.2-4.005H2.382v-3.314h5.908l-4.2-4.006 2.326-2.38 4.004 4.117V.306h3.32v5.547z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">Utkarsh.</div>
+            <p>&copy; 2026 Utkarsh. All rights reserved.</p>
+            <button id="back-to-top" class="magnetic-btn"><i data-lucide="arrow-up"></i></button>
+        </div>
+    </footer>
+
+    <!-- Video Modal -->
+    <div id="video-modal" class="modal">
+        <div class="modal-bg"></div>
+        <div class="modal-content glass">
+            <button class="close-modal magnetic-btn"><i data-lucide="x"></i></button>
+            <div class="video-container">
+                <video id="custom-player" preload="metadata">
+                    <!-- Source injected via JS -->
+                </video>
+                <div class="custom-controls">
+                    <button id="play-pause" class="control-btn"><i data-lucide="play"></i></button>
+                    <div class="progress-wrapper">
+                        <div class="progress-bar"><div class="progress-filled"></div></div>
+                    </div>
+                    <div class="time-display">
+                        <span id="current-time">0:00</span> / <span id="duration">0:00</span>
+                    </div>
+                    <button id="mute-unmute" class="control-btn"><i data-lucide="volume-2"></i></button>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
+                    <select id="playback-speed" class="control-btn">
+                        <option value="0.5">0.5x</option>
+                        <option value="1" selected>1x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="2">2x</option>
+                    </select>
+                    <button id="pip-btn" class="control-btn"><i data-lucide="picture-in-picture"></i></button>
+                    <button id="fullscreen-btn" class="control-btn"><i data-lucide="maximize"></i></button>
+                </div>
+            </div>
+            <div class="modal-info">
+                <div class="modal-header">
+                    <h3 id="modal-title">Project Title</h3>
+                    <span class="category-tag" id="modal-category">Category</span>
+                </div>
+                <p id="modal-desc">Project description goes here.</p>
+                <div class="modal-meta">
+                    <span id="modal-software"><i data-lucide="cpu"></i> Software Used</span>
+                </div>
+                <div class="modal-nav">
+                    <button id="prev-project" class="magnetic-btn"><i data-lucide="chevron-left"></i> Prev</button>
+                    <button id="next-project" class="magnetic-btn">Next <i data-lucide="chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

@@ -44,6 +44,61 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousemove', (e) => {
         gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0 });
         gsap.to(cursorFollower, { x: e.clientX, y: e.clientY, duration: 0.15 });
+        
+        // Interactive Proximity Grid Mask Logic
+        const gridBg = document.querySelector('.interactive-grid');
+        const halftoneGrids = document.querySelectorAll('.halftone-grid');
+        
+        if (gridBg) {
+            // Update global mouse coordinates for the background glow
+            gridBg.style.setProperty('--mouse-x', `${e.clientX}px`);
+            gridBg.style.setProperty('--mouse-y', `${e.clientY}px`);
+            
+            // Show halftone grids and update their mask positions
+            halftoneGrids.forEach(grid => {
+                grid.style.opacity = 1;
+                grid.style.setProperty('--mouse-x', `${e.clientX}px`);
+                grid.style.setProperty('--mouse-y', `${e.clientY}px`);
+            });
+        }
+
+        // Proximity Weight Hover Logic
+        const pwTexts = document.querySelectorAll('.outline-hover');
+        pwTexts.forEach(pwText => {
+            const strokeSpans = pwText.querySelectorAll('.stroke-layer span');
+            const fillSpans = pwText.querySelectorAll('.fill-layer span');
+            
+            if(strokeSpans.length > 0) {
+                strokeSpans.forEach((span, index) => {
+                    const rect = span.getBoundingClientRect();
+                    const charCenterX = rect.left + rect.width / 2;
+                    const charCenterY = rect.top + rect.height / 2;
+                    
+                    const dist = Math.hypot(e.clientX - charCenterX, e.clientY - charCenterY);
+                    
+                    const maxDist = 300;
+                    let scaleValue = 1; // default scale
+                    
+                    if (dist < maxDist) {
+                        const intensity = 1 - (dist / maxDist);
+                        // Scale up based on proximity
+                        scaleValue = 1 + Math.pow(intensity, 1.5) * 0.3; 
+                    }
+                    
+                    span.style.fontSize = `calc(1em * ${scaleValue})`;
+                    
+                    fillSpans[index].style.fontSize = `calc(1em * ${scaleValue})`;
+                });
+            }
+
+            // Update mask position for fill-layer
+            const fillLayer = pwText.querySelector('.fill-layer');
+            const rect = fillLayer ? fillLayer.getBoundingClientRect() : pwText.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            pwText.style.setProperty('--mouse-x', `${x}px`);
+            pwText.style.setProperty('--mouse-y', `${y}px`);
+        });
     });
 
     // Magnetic Buttons & Cursor Hover State
@@ -69,9 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Loading Animation
+    // New Decode Text Loader Animation
     const loader = document.querySelector('.loader');
-    const progressFill = document.querySelector('.loader .progress');
+    const decodeEl = document.getElementById('loader-decode');
     
     function hideLoaderFallback() {
         if (loader) {
@@ -80,23 +135,65 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    if (typeof gsap !== 'undefined') {
-        gsap.to(progressFill, {
-            width: '100%',
-            duration: 2,
-            ease: 'power2.inOut',
-            onComplete: () => {
+    // Initialize Proximity Weight Texts
+    const outlineTexts = document.querySelectorAll('.outline-hover');
+    outlineTexts.forEach(pwText => {
+        const text = pwText.dataset.text || pwText.textContent;
+        pwText.innerHTML = '';
+        
+        const strokeLayer = document.createElement('div');
+        strokeLayer.className = 'stroke-layer';
+        
+        const fillLayer = document.createElement('div');
+        fillLayer.className = 'fill-layer';
+        
+        text.split('').forEach(char => {
+            const span1 = document.createElement('span');
+            span1.textContent = char;
+            strokeLayer.appendChild(span1);
+            
+            const span2 = document.createElement('span');
+            span2.textContent = char;
+            fillLayer.appendChild(span2);
+        });
+        
+        pwText.appendChild(strokeLayer);
+        pwText.appendChild(fillLayer);
+    });
+
+    if (typeof gsap !== 'undefined' && decodeEl) {
+        const finalWord = decodeEl.dataset.value;
+        const chars = '!<>-_\\\\/[]{}—=+*^?#________';
+        let iterations = 0;
+        const maxIterations = 30; // Control speed
+        
+        const decodeInterval = setInterval(() => {
+            decodeEl.textContent = finalWord.split('').map((letter, index) => {
+                if(index < iterations / 3) {
+                    return finalWord[index];
+                }
+                return chars[Math.floor(Math.random() * chars.length)];
+            }).join('');
+            
+            iterations++;
+            
+            if (iterations >= maxIterations) {
+                clearInterval(decodeInterval);
+                decodeEl.textContent = finalWord;
+                
+                // Curtain Reveal
                 gsap.to(loader, {
                     yPercent: -100,
                     duration: 1,
-                    ease: 'power4.inOut',
+                    delay: 0.5,
+                    ease: 'expo.inOut',
                     onComplete: () => {
                         document.body.classList.remove('loading');
                         initHeroAnimations();
                     }
                 });
             }
-        });
+        }, 60);
         
         // Failsafe if animation gets stuck
         setTimeout(hideLoaderFallback, 4000);
@@ -118,6 +215,18 @@ document.addEventListener('DOMContentLoaded', () => {
     lenis.on('scroll', (e) => {
         const currentScroll = e.animatedScroll;
         
+        // Grid Parallax
+        const gridBg = document.querySelector('.interactive-grid');
+        const halftoneGrids = document.querySelectorAll('.halftone-grid');
+        
+        if (gridBg) {
+            // Scroll the dots opposite to scroll direction for a parallax feel
+            gridBg.style.backgroundPositionY = `${currentScroll * -0.3}px`;
+            halftoneGrids.forEach(grid => {
+                grid.style.backgroundPositionY = `${currentScroll * -0.3}px`;
+            });
+        }
+
         if (currentScroll > 50) {
             navbar.classList.add('scrolled');
         } else {
@@ -161,6 +270,22 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch(e) {}
         return url;
     }
+
+    function parseThumbnailUrl(url) {
+        if (!url) return '';
+        try {
+            if (url.includes('player.cloudinary.com/embed')) {
+                const urlObj = new URL(url);
+                const cloudName = urlObj.searchParams.get('cloud_name');
+                const publicId = urlObj.searchParams.get('public_id');
+                if (cloudName && publicId) {
+                    // Changing extension to .jpg generates an automatic thumbnail
+                    return `https://res.cloudinary.com/${cloudName}/video/upload/${publicId}.jpg`;
+                }
+            }
+        } catch(e) {}
+        return url.replace('.mp4', '.jpg');
+    }
     
     // Lazy Load Observer for Videos
     const lazyVideoObserver = new IntersectionObserver((entries, observer) => {
@@ -181,18 +306,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const filteredData = category === 'all' 
             ? PORTFOLIO_DATA 
             : PORTFOLIO_DATA.filter(item => item.category === category);
-            
-        filteredData.forEach((item, index) => {
+                   filteredData.forEach((item, index) => {
             const parsedVideoSrc = parseVideoUrl(item.videoSrc);
-            // Random time for thumbnail to avoid starting blank frames
-            const randomTime = (Math.random() * 3 + 2).toFixed(1); 
+            const thumbSrc = parseThumbnailUrl(item.videoSrc);
             
-            // Create a preview using the video file
             const card = document.createElement('div');
             card.className = 'project-card';
             card.dataset.id = item.id;
             card.innerHTML = `
-                <video class="project-video-preview lazy-video" data-src="${parsedVideoSrc}#t=${randomTime}" muted loop playsinline preload="metadata"></video>
+                <img src="${thumbSrc}" class="project-thumbnail lazy-image" loading="lazy" alt="${item.title}">
+                <video class="project-video-preview" data-src="${parsedVideoSrc}" muted loop playsinline preload="none"></video>
+                <div class="card-glare"></div>
                 <div class="project-overlay">
                     <span class="project-category">${item.category}</span>
                     <h3 class="project-title">${item.title}</h3>
@@ -201,22 +325,63 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span>${item.software}</span>
                     </div>
                 </div>
-                <div class="play-indicator"><i data-lucide="play" style="color:white; width:24px; height:24px;"></i></div>
+                <div class="play-indicator">
+                    <i data-lucide="play" class="icon-play" style="color:white; width:24px; height:24px;"></i>
+                </div>
             `;
             portfolioGrid.appendChild(card);
             
             // Re-init lucide icons for new elements
             lucide.createIcons();
 
-            // Setup lazy loading
             const videoPreview = card.querySelector('video');
-            lazyVideoObserver.observe(videoPreview);
+            const thumbImage = card.querySelector('.project-thumbnail');
 
-            // Hover to play preview logic
-            card.addEventListener('mouseenter', () => videoPreview.play().catch(e => {}));
+            // Hover to play preview logic & 3D Tilt
+            card.addEventListener('mouseenter', () => {
+                if(window.innerWidth > 768) {
+                    // Only play video preview on hover for desktop
+                    if(!videoPreview.src) {
+                        videoPreview.src = videoPreview.dataset.src;
+                    }
+                    videoPreview.play().then(() => {
+                        gsap.to(thumbImage, {opacity: 0, duration: 0.3});
+                    }).catch(e => {});
+                }
+            });
+            
             card.addEventListener('mouseleave', () => {
-                videoPreview.pause();
-                videoPreview.currentTime = randomTime; // Reset to random thumbnail frame
+                if(window.innerWidth > 768) {
+                    videoPreview.pause();
+                    gsap.to(thumbImage, {opacity: 1, duration: 0.3});
+                }
+                
+                // Reset tilt
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+                const glare = card.querySelector('.card-glare');
+                if (glare) glare.style.opacity = '0';
+            });
+            
+            // 3D Proximity Tilt Logic
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left; // x position within the element.
+                const y = e.clientY - rect.top;  // y position within the element.
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                // Calculate rotation (max 10 degrees)
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                
+                // Update glare position
+                const glare = card.querySelector('.card-glare');
+                if (glare) {
+                    glare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.15) 0%, transparent 50%)`;
+                }
             });
 
             // Click to open modal
@@ -289,6 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateModalContent(item);
         
         // Prep modal state
+        SoundManager.playModalWhoosh();
         modal.style.opacity = 1;
         modal.style.pointerEvents = 'all';
         modal.classList.add('active'); // Just for internal state logic now
@@ -420,6 +586,11 @@ document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
     });
 
+    // Toggle play/pause by clicking on the video itself
+    customPlayer.addEventListener('click', () => {
+        playPauseBtn.click();
+    });
+
     customPlayer.addEventListener('timeupdate', () => {
         const percent = (customPlayer.currentTime / customPlayer.duration) * 100;
         progressFilled.style.width = `${percent}%`;
@@ -542,15 +713,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Counters Animation
     const counters = document.querySelectorAll('.counter');
     counters.forEach(counter => {
+        // Initial state
+        gsap.set(counter, { opacity: 0, scale: 0.5 });
+        counter.counterValue = 0; // Custom property for GSAP to tween
+        
         gsap.to(counter, {
             scrollTrigger: {
                 trigger: '.stats',
                 start: 'top 85%'
             },
-            innerHTML: counter.dataset.target,
+            opacity: 1,
+            scale: 1,
+            counterValue: parseInt(counter.dataset.target),
             duration: 2,
-            snap: { innerHTML: 1 },
-            ease: 'power2.out'
+            ease: 'power2.out',
+            onUpdate: () => {
+                counter.innerHTML = Math.floor(counter.counterValue);
+            }
         });
     });
 
@@ -574,6 +753,79 @@ document.addEventListener('DOMContentLoaded', () => {
         ease: "none",
         duration: 20,
         repeat: -1
+    });
+
+    // Lightweight Synthetic UI Sound Manager
+    window.SoundManager = (() => {
+        let audioCtx;
+        let enabled = false;
+
+        // Must be initialized on first user interaction due to browser policies
+        const init = () => {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+                enabled = true;
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        };
+
+        const playHoverTick = () => {
+            if (!enabled || !audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime); // High pitch tick
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
+            
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime); // Very quiet
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+            
+            osc.start(audioCtx.currentTime);
+            osc.stop(audioCtx.currentTime + 0.05);
+        };
+
+        const playModalWhoosh = () => {
+            if (!enabled || !audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+            
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(50, audioCtx.currentTime); // Low sub bass
+            osc.frequency.linearRampToValueAtTime(30, audioCtx.currentTime + 0.4);
+            
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(100, audioCtx.currentTime);
+            filter.frequency.linearRampToValueAtTime(1000, audioCtx.currentTime + 0.4);
+
+            gain.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 0.1);
+            gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
+            
+            osc.start(audioCtx.currentTime);
+            osc.stop(audioCtx.currentTime + 0.5);
+        };
+
+        return { init, playHoverTick, playModalWhoosh };
+    })();
+
+    // Attach to interactions
+    document.body.addEventListener('click', SoundManager.init, { once: true });
+    document.body.addEventListener('mousemove', SoundManager.init, { once: true });
+
+    // Attach sound to magnetic buttons
+    document.querySelectorAll('.magnetic-btn').forEach(btn => {
+        btn.addEventListener('mouseenter', SoundManager.playHoverTick);
     });
 
     // Back to top

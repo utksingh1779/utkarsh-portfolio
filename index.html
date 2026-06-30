@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;800&family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@300;400;600;800&family=Poppins:wght@600&display=swap" rel="stylesheet">
     
     <!-- GSAP & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -27,16 +27,20 @@
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
 
-    <!-- Spotlight Background -->
-    <div class="spotlight"></div>
-    <div class="noise"></div>
+    <!-- Global Texture Overlay -->
+    <div class="global-texture"></div>
 
-    <!-- Loader -->
+    <!-- Interactive Proximity Grid Background (Halftone Effect) -->
+    <div class="interactive-grid"></div>
+    <div class="halftone-grid layer-1"></div>
+    <div class="halftone-grid layer-2"></div>
+    <div class="halftone-grid layer-3"></div>
+
+    <!-- Loader (Decode Text) -->
     <div class="loader">
         <div class="loader-content">
-            <h1 class="loader-title">Utkarsh</h1>
-            <p class="loader-subtitle" style="font-size: 1.2rem; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 4px;">Freelance Video Editor</p>
-            <div class="progress-bar"><div class="progress"></div></div>
+            <h1 class="decode-text" id="loader-decode" data-value="UTKARSH">-------</h1>
+            <p class="loader-subtitle" style="font-size: 1.2rem; color: var(--accent-red); text-transform: uppercase; letter-spacing: 4px;">Loading Experience</p>
         </div>
     </div>
 
@@ -54,25 +58,24 @@
     <main>
         <!-- Hero Section -->
         <section id="hero" class="hero">
-            <div class="video-overlay"></div>
-            <!-- Background Video - Users can replace this -->
-            <video class="hero-bg" autoplay loop muted playsinline>
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-1610-large.mp4" type="video/mp4">
-            </video>
-            
             <div class="hero-content">
-                <h1 class="glitch" data-text="Utkarsh">Utkarsh</h1>
-                <h3>Freelance Video Editor</h3>
-                <p class="tagline" style="font-size: 1.5rem; color: #ccc; font-weight: 300; font-style: italic;">"I turn ordinary footage into cinematic stories."</p>
-                <a href="#work" class="btn-primary magnetic-btn mt-2" id="view-work-btn">
-                    <span class="btn-text">View My Work</span>
-                    <i data-lucide="arrow-down"></i>
-                </a>
-            </div>
-            
-            <div class="scroll-indicator">
-                <span>Scroll</span>
-                <div class="line"></div>
+                <h1 class="massive-text liquid-glass">UTKARSH.</h1>
+                <h1 class="massive-text indent outline-hover" data-text="FREELANCE">FREELANCE</h1>
+                <h1 class="massive-text liquid-glass step-3">VIDEO EDITOR.</h1>
+                
+                <div class="hero-footer">
+                    <div class="hero-footer-content">
+                        <p class="tagline">Crafting high-end cinematic stories, anime edits, and motion graphics with precision.</p>
+                        <a href="#work" class="btn-primary magnetic-btn mt-2" id="view-work-btn" style="display: none;">
+                            <span class="btn-text">Explore Work</span>
+                            <i data-lucide="arrow-down-right"></i>
+                        </a>
+                    </div>
+                    <div class="scroll-indicator-modern">
+                        <div class="scroll-icon"><i data-lucide="mouse"></i></div>
+                        <div class="scroll-text">Scroll to explore</div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -177,46 +180,41 @@
             </div>
         </section>
 
-        <!-- Contact Section -->
-        <section id="contact" class="contact">
-            <div class="contact-content">
-                <h2>Let's Create Something Amazing</h2>
-                <p>Ready to elevate your video content? Get in touch today.</p>
-                
-                <div class="contact-links">
-                    <a href="mailto:utksingh1779@gmail.com" class="btn-primary magnetic-btn lg">
-                        <span class="btn-text">Hire Me (Email)</span>
-                        <i data-lucide="mail"></i>
-                    </a>
-                    <a href="https://wa.me/918433491257" target="_blank" class="btn-primary magnetic-btn lg outline">
-                        <span class="btn-text">WhatsApp Me</span>
-                        <i data-lucide="message-circle"></i>
-                    </a>
-                </div>
-                
-                <div class="socials">
-                    <a href="mailto:utksingh1779@gmail.com" class="magnetic-btn" title="Email"><i data-lucide="mail"></i></a>
-                    <a href="https://instagram.com/utkarsh.6.20" target="_blank" class="magnetic-btn" title="Instagram: @utkarsh.6.20">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-                    </a>
-                    <a href="https://linktr.ee/utk20" target="_blank" class="magnetic-btn" title="Linktree: utk20">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M13.736 5.853l4.005-4.117 2.325 2.38-4.2 4.005h5.908v3.315h-5.908l4.2 4.008-2.325 2.38-4.005-4.117v7.75h-3.32v-7.75l-4.004 4.117-2.326-2.38 4.2-4.005H2.382v-3.314h5.908l-4.2-4.006 2.326-2.38 4.004 4.117V.306h3.32v5.547z"/>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        </section>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo">Utkarsh.</div>
+    <!-- Massive CTA Footer -->
+    <section id="contact" class="massive-cta">
+        <h2 class="massive-cta-text liquid-glass" data-text="HIRE ME.">HIRE ME.</h2>
+        
+        <div class="contact-links" style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+            <a href="mailto:utksingh1779@gmail.com" class="btn-primary magnetic-btn lg">
+                <span class="btn-text">Hire Me (Email)</span>
+                <i data-lucide="mail"></i>
+            </a>
+            <a href="https://wa.me/918433491257" target="_blank" class="btn-primary magnetic-btn lg outline">
+                <span class="btn-text">WhatsApp Me</span>
+                <i data-lucide="message-circle"></i>
+            </a>
+        </div>
+        
+        <div class="socials">
+            <a href="mailto:utksingh1779@gmail.com" class="magnetic-btn" title="Email"><i data-lucide="mail"></i></a>
+            <a href="https://instagram.com/utkarsh.6.20" target="_blank" class="magnetic-btn" title="Instagram: @utkarsh.6.20">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            </a>
+            <a href="https://linktr.ee/utk20" target="_blank" class="magnetic-btn" title="Linktree: utk20">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M13.736 5.853l4.005-4.117 2.325 2.38-4.2 4.005h5.908v3.315h-5.908l4.2 4.008-2.325 2.38-4.005-4.117v7.75h-3.32v-7.75l-4.004 4.117-2.326-2.38 4.2-4.005H2.382v-3.314h5.908l-4.2-4.006 2.326-2.38 4.004 4.117V.306h3.32v5.547z"/>
+                </svg>
+            </a>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-logo" style="font-weight: 900; font-family: var(--font-heading); font-size: 1.5rem;">Utkarsh.</div>
             <p>&copy; 2026 Utkarsh. All rights reserved.</p>
             <button id="back-to-top" class="magnetic-btn"><i data-lucide="arrow-up"></i></button>
         </div>
-    </footer>
+    </section>
 
     <!-- Video Modal -->
     <div id="video-modal" class="modal">
